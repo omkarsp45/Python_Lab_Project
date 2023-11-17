@@ -10,3 +10,7 @@
 ## 16/11/2023
 -> Writing Simple Pygame Program 
 -> Setting up Window 
+
+## 17/11/2023
+-> Draw Chess Board
+-> Load Images of Piece
