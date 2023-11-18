@@ -14,3 +14,6 @@
 ## 17/11/2023
 -> Draw Chess Board
 -> Load Images of Piece
+
+## 18/11/2023
+-> Draw Pieces on Board at their starting locations
