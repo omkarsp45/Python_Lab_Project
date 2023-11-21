@@ -17,3 +17,6 @@
 
 ## 18/11/2023
 -> Draw Pieces on Board at their starting locations
+
+## 21/11/2023
+-> Added Players Turn And Piece Delete Logic
