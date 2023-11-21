@@ -24,6 +24,12 @@ pygame.display.set_icon(icon)
 # Optional FPS ajduste(no such need of fps manager here since game is not animated type)
 speed = pygame.time.Clock()
 
+# Turn 1-> White
+# Turn 2-> Black
+turn = 1
+
+# index of selected location
+selected = -1
 
 # Drawing Chess Board
 def draw_chess_board():
@@ -116,6 +122,19 @@ def draw_chess_pieces():
         elif b_pieces[i]== 'king':
             screen.blit(black_king , (b_location[i][0]*100+10 , b_location[i][1]*100+15))
 
+# Function that finds valid moves of each piece on boards
+def val_moves(pieces , locations , turn):
+    moves = []
+    all_pieces_moves = []
+    for i in range(len(pieces)):
+        piece_location = locations[i]
+        piece = pieces[i]
+        # will check for each piecs
+        all_pieces_moves += moves
+    return all_pieces_moves
+
+# valid(available) moves
+available_moves = []
 
 # Game Starts From Here -->>
 while running:
@@ -128,9 +147,30 @@ while running:
             x = Event.pos[0]
             y = Event.pos[1]
             clicked_coordinate = (x//100 , y//100)  # floor div to find exact block coordinate
+            if turn == 1:
+                if clicked_coordinate in w_locations:
+                    selected = w_locations.index(clicked_coordinate)
+                if clicked_coordinate in available_moves and selected != -1:
+                    if clicked_coordinate in b_location:
+                        piece_index = b_location.index(clicked_coordinate)
+                        b_pieces.pop(piece_index)
+                        b_location.pop(piece_index)
+                    turn = 2
+                    selected = -1
+                    available_moves = []  
+            else:
+                if clicked_coordinate in b_location:
+                    selected = b_location.index(clicked_coordinate)
+                if clicked_coordinate in available_moves and selected != -1:
+                    if clicked_coordinate in w_locations:
+                        piece_index = w_locations.index(clicked_coordinate)
+                        w_pieces.pop(piece_index)
+                        w_locations.pop(piece_index)
+                    turn = 1
+                    selected = -1
+                    available_moves = []
 
-            # turn moves , selected piece logic -->  next target  
-            
+
 
     draw_chess_board() # Draw Chess Board
 
