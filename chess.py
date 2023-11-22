@@ -122,6 +122,28 @@ def draw_chess_pieces():
         elif b_pieces[i]== 'king':
             screen.blit(black_king , (b_location[i][0]*100+10 , b_location[i][1]*100+15))
 
+def pawn_moves(location , turn ):
+    moves_list = []
+    if turn == 'white':
+        if (location[0],location[1]+1) not in ( w_locations and b_location ) and location[1]<7: 
+            moves_list.append((location[0],location[1]+1))
+        if (location[0],location[1]+2) not in ( w_locations and b_location ) and location : 
+            moves_list.append((location[0],location[1]+2))  
+        if (location[0]+1,location[1]+1) in b_location :
+            moves_list.append((location[0]+1,location[1]+1)) 
+        if (location[0]-1,location[1]+1) in b_location :
+            moves_list.append((location[0]-1,location[1]+1))       
+    else:
+        if (location[0],location[1]-1) not in ( w_locations and b_location ): 
+            moves_list.append((location[0],location[1]-1))
+        if (location[0],location[1]-2) not in ( w_locations and b_location ): 
+            moves_list.append((location[0],location[1]-2))  
+        if (location[0]+1,location[1]-1) in w_locations :
+            moves_list.append((location[0]+1,location[1]-1)) 
+        if (location[0]-1,location[1]-1) in w_locations :
+            moves_list.append((location[0]-1,location[1]-1)) 
+    return moves_list
+
 # Function that finds valid moves of each piece on boards
 def val_moves(pieces , locations , turn):
     moves = []
@@ -129,15 +151,40 @@ def val_moves(pieces , locations , turn):
     for i in range(len(pieces)):
         piece_location = locations[i]
         piece = pieces[i]
-        # will check for each piecs
-        all_pieces_moves += moves
+        if piece == 'pawn':
+            moves = pawn_moves(piece_location , turn)
+        all_pieces_moves.append(moves)
     return all_pieces_moves
 
 # valid(available) moves
-available_moves = []
+def all_valid_moves():
+    if turn == 1 :
+        options = white_options
+    else:
+        options = black_options 
+    toReturn = options[selected]
+    return toReturn       
 
-# Game Starts From Here -->>
+valid_moves = []
+
+def draw_color(moves):
+    if turn == 1:
+        color = 'red'
+    else:
+        color = 'blue'
+    for i in range(len(moves)):
+        pygame.draw.circle(screen, color, (moves[i][0] * 100 + 50, moves[i][1] * 100 + 50), 5)
+
+white_options = val_moves(w_pieces , w_locations , 'white')
+black_options = val_moves(b_pieces , b_location , 'black')
+
+# Game Starts Frob_pieces --b>
 while running:
+    draw_chess_board() # Draw Chess Board
+    
+    draw_chess_pieces() # Draw Chess Pieces
+
+    speed.tick(30)      # Game will be run at 30fps.
     for Event in pygame.event.get():
         if Event.type == pygame.QUIT: # Functionality to close button
             pygame.quit()    # Just deinitializes library(can get error in further pygame instructions).
@@ -150,6 +197,8 @@ while running:
             if turn == 1:
                 if clicked_coordinate in w_locations:
                     selected = w_locations.index(clicked_coordinate)
+                    available_moves = all_valid_moves()
+                    draw_color(available_moves)
                 if clicked_coordinate in available_moves and selected != -1:
                     if clicked_coordinate in b_location:
                         piece_index = b_location.index(clicked_coordinate)
@@ -161,6 +210,8 @@ while running:
             else:
                 if clicked_coordinate in b_location:
                     selected = b_location.index(clicked_coordinate)
+                    available_moves = all_valid_moves()
+                    draw_color(available_moves)
                 if clicked_coordinate in available_moves and selected != -1:
                     if clicked_coordinate in w_locations:
                         piece_index = w_locations.index(clicked_coordinate)
@@ -170,13 +221,6 @@ while running:
                     selected = -1
                     available_moves = []
 
-
-
-    draw_chess_board() # Draw Chess Board
-
-    draw_chess_pieces() # Draw Chess Pieces
-
-    speed.tick(30)      # Game will be run at 30fps.
     pygame.display.flip()
 
 
