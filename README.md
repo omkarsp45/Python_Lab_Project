@@ -20,3 +20,7 @@
 
 ## 21/11/2023
 -> Added Players Turn And Piece Delete Logic
+
+## 22/11/2023
+-> Add Pawn Logic 
+-> Draw on Available Moves
