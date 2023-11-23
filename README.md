@@ -24,3 +24,7 @@
 ## 22/11/2023
 -> Add Pawn Logic 
 -> Draw on Available Moves
+
+## 23/11/2023
+-> Fix Main Loop Logic
+-> Corrected Pawn Moves List Function
