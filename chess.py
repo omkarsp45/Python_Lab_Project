@@ -14,7 +14,7 @@ running = True
 
 # Python Window Setup
 # Chess Board
-screen = pygame.display.set_mode([width,height] , pygame.RESIZABLE)
+screen = pygame.display.set_mode([width,height])
 # Game Name
 pygame.display.set_caption("Satranj Ka Khel")
 # Game Logo
@@ -24,12 +24,14 @@ pygame.display.set_icon(icon)
 # Optional FPS ajduste(no such need of fps manager here since game is not animated type)
 speed = pygame.time.Clock()
 
-# Turn 1-> White
-# Turn 2-> Black
+# Turn 1-> WhiteSelect
+# Turn 2-> WhiteMove
+# Turn 3-> BlackSelect 
+# Turn 4-> BlackMove
 turn = 1
 
 # index of selected location
-selected = -1
+selected = -100
 
 # Drawing Chess Board
 def draw_chess_board():
@@ -78,20 +80,6 @@ black_king = pygame.transform.scale(black_king, (80, 80))
     # screen.blit(white_knight , (200+15,100+20))
     # screen.blit(black_pawn , (100+20,300+30))
 
-# Pieces Lists
-w_pieces = ['pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 
-            'rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook']
-
-b_pieces = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook', 
-            'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn']
-
-# Indexing of each piece to draw pieces
-b_location = [(0,0),(1,0),(2,0),(3,0),(4,0),(5,0),(6,0),(7,0),
-              (0,1),(1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1)]
-
-w_locations = [(0,6),(1,6),(2,6),(3,6),(4,6),(5,6),(6,6),(7,6),
-              (0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,7),(7,7)]
-
 # Drawing Chess Pieces 
 def draw_chess_pieces():
     for i in range(len(w_pieces)):
@@ -110,37 +98,51 @@ def draw_chess_pieces():
 
     for i in range(len(b_pieces)):
         if b_pieces[i]=='pawn':
-            screen.blit(black_pawn , (b_location[i][0]*100+20 , b_location[i][1]*100+30))
+            screen.blit(black_pawn , (b_locations[i][0]*100+20 , b_locations[i][1]*100+30))
         elif b_pieces[i]== 'rook':
-            screen.blit(black_rook , (b_location[i][0]*100+15 , b_location[i][1]*100+20))
+            screen.blit(black_rook , (b_locations[i][0]*100+15 , b_locations[i][1]*100+20))
         elif b_pieces[i]== 'knight':
-            screen.blit(black_knight , (b_location[i][0]*100+15 , b_location[i][1]*100+20))
+            screen.blit(black_knight , (b_locations[i][0]*100+15 , b_locations[i][1]*100+20))
         elif b_pieces[i]== 'bishop':
-            screen.blit(black_bishop , (b_location[i][0]*100+15 , b_location[i][1]*100+20))
+            screen.blit(black_bishop , (b_locations[i][0]*100+15 , b_locations[i][1]*100+20))
         elif b_pieces[i]== 'queen':
-            screen.blit(black_queen , (b_location[i][0]*100+10 , b_location[i][1]*100+15))
+            screen.blit(black_queen , (b_locations[i][0]*100+10 , b_locations[i][1]*100+15))
         elif b_pieces[i]== 'king':
-            screen.blit(black_king , (b_location[i][0]*100+10 , b_location[i][1]*100+15))
+            screen.blit(black_king , (b_locations[i][0]*100+10 , b_locations[i][1]*100+15))
+
+# Pieces Lists
+b_pieces = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook', 
+            'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn']
+
+w_pieces = ['pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 
+            'rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook']
+
+# Indexing of each piece to draw pieces
+b_locations = [(0,0),(1,0),(2,0),(3,0),(4,0),(5,0),(6,0),(7,0),
+              (0,1),(1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1)]
+
+w_locations = [(0,6),(1,6),(2,6),(3,6),(4,6),(5,6),(6,6),(7,6),
+              (0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,7),(7,7)]
 
 def pawn_moves(location , turn ):
     moves_list = []
-    if turn == 'white':
-        if (location[0],location[1]+1) not in ( w_locations and b_location ) and location[1]<7: 
+    if turn == 'black':
+        if (location[0],location[1]+1) not in w_locations and (location[0],location[1]+1) not in b_locations : 
             moves_list.append((location[0],location[1]+1))
-        if (location[0],location[1]+2) not in ( w_locations and b_location ) and location : 
-            moves_list.append((location[0],location[1]+2))  
-        if (location[0]+1,location[1]+1) in b_location :
+            if (location[0],location[1]+2) not in w_locations and (location[0],location[1]+2) not in b_locations : 
+                moves_list.append((location[0],location[1]+2))  
+        if (location[0]+1,location[1]+1) in w_locations :
             moves_list.append((location[0]+1,location[1]+1)) 
-        if (location[0]-1,location[1]+1) in b_location :
-            moves_list.append((location[0]-1,location[1]+1))       
+        if (location[0]-1,location[1]+1) in w_locations :
+            moves_list.append((location[0]-1,location[1]+1))        
     else:
-        if (location[0],location[1]-1) not in ( w_locations and b_location ): 
+        if (location[0],location[1]-1) not in w_locations and (location[0],location[1]-1) not in b_locations : 
             moves_list.append((location[0],location[1]-1))
-        if (location[0],location[1]-2) not in ( w_locations and b_location ): 
-            moves_list.append((location[0],location[1]-2))  
-        if (location[0]+1,location[1]-1) in w_locations :
-            moves_list.append((location[0]+1,location[1]-1)) 
-        if (location[0]-1,location[1]-1) in w_locations :
+            if (location[0],location[1]-2) not in w_locations and (location[0],location[1]-2) not in b_locations : 
+                moves_list.append((location[0],location[1]-2))  
+        if (location[0]+1,location[1]-1) in b_locations :
+            moves_list.append((location[0]+1,location[1]-1))    
+        if (location[0]-1,location[1]-1) in b_locations :
             moves_list.append((location[0]-1,location[1]-1)) 
     return moves_list
 
@@ -158,17 +160,17 @@ def val_moves(pieces , locations , turn):
 
 # valid(available) moves
 def all_valid_moves():
-    if turn == 1 :
+    if turn <= 2 :
         options = white_options
     else:
         options = black_options 
     toReturn = options[selected]
     return toReturn       
 
-valid_moves = []
+available_moves = []
 
 def draw_color(moves):
-    if turn == 1:
+    if turn <= 2:
         color = 'red'
     else:
         color = 'blue'
@@ -176,15 +178,19 @@ def draw_color(moves):
         pygame.draw.circle(screen, color, (moves[i][0] * 100 + 50, moves[i][1] * 100 + 50), 5)
 
 white_options = val_moves(w_pieces , w_locations , 'white')
-black_options = val_moves(b_pieces , b_location , 'black')
+black_options = val_moves(b_pieces , b_locations , 'black')
 
 # Game Starts Frob_pieces --b>
 while running:
-    draw_chess_board() # Draw Chess Board
+    speed.tick(60)      # Game will be run at 60fps.
     
+    draw_chess_board() # Draw Chess Board
+
     draw_chess_pieces() # Draw Chess Pieces
 
-    speed.tick(30)      # Game will be run at 30fps.
+    if selected != -100 :
+        available_moves = all_valid_moves()
+        draw_color(available_moves)
     for Event in pygame.event.get():
         if Event.type == pygame.QUIT: # Functionality to close button
             pygame.quit()    # Just deinitializes library(can get error in further pygame instructions).
@@ -194,35 +200,38 @@ while running:
             x = Event.pos[0]
             y = Event.pos[1]
             clicked_coordinate = (x//100 , y//100)  # floor div to find exact block coordinate
-            if turn == 1:
+            if turn <= 2:
                 if clicked_coordinate in w_locations:
                     selected = w_locations.index(clicked_coordinate)
-                    available_moves = all_valid_moves()
-                    draw_color(available_moves)
-                if clicked_coordinate in available_moves and selected != -1:
-                    if clicked_coordinate in b_location:
-                        piece_index = b_location.index(clicked_coordinate)
-                        b_pieces.pop(piece_index)
-                        b_location.pop(piece_index)
                     turn = 2
-                    selected = -1
+                if clicked_coordinate in available_moves and selected != -100:
+                    w_locations[selected] = clicked_coordinate
+                    if clicked_coordinate in b_locations:
+                        piece_index = b_locations.index(clicked_coordinate)
+                        b_pieces.pop(piece_index)
+                        b_locations.pop(piece_index)
+                    turn = 3
+                    selected = -100
                     available_moves = []  
-            else:
-                if clicked_coordinate in b_location:
-                    selected = b_location.index(clicked_coordinate)
-                    available_moves = all_valid_moves()
-                    draw_color(available_moves)
-                if clicked_coordinate in available_moves and selected != -1:
+                white_options = val_moves(w_pieces , w_locations , 'white')
+                black_options = val_moves(b_pieces , b_locations , 'black')    
+            if turn > 2 :
+                if clicked_coordinate in b_locations:
+                    selected = b_locations.index(clicked_coordinate)                   
+                    turn = 4
+                if clicked_coordinate in available_moves and selected != -100:
+                    b_locations[selected] = clicked_coordinate
                     if clicked_coordinate in w_locations:
                         piece_index = w_locations.index(clicked_coordinate)
                         w_pieces.pop(piece_index)
                         w_locations.pop(piece_index)
                     turn = 1
-                    selected = -1
+                    selected = -100
                     available_moves = []
+                white_options = val_moves(w_pieces , w_locations , 'white')
+                black_options = val_moves(b_pieces , b_locations , 'black')      
 
     pygame.display.flip()
-
 
 pygame.quit()
 sys.exit()
