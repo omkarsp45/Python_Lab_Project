@@ -32,4 +32,4 @@
 ## 24/11/2023
 -> Adding Rook Moves Logic
 -> Adding Queen and Bishop Moves Logic
- 
+-> Adding Knight Moves Logic 
