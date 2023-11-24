@@ -209,6 +209,75 @@ def rook_moves(location , turn ):
         
     return moves_list
 
+def bishop_moves(location , turn):
+    moves_list = []
+    if turn == 'white':
+        for i in range(1,8):
+            if (location[0]-i,location[1]-i) not in w_locations :
+                moves_list.append((location[0]-i,location[1]-i))
+                if (location[0]-i,location[1]-i) in b_locations :
+                    break
+            else:
+                break
+        for i in range(1,8):
+            if (location[0]+i,location[1]+i) not in w_locations :
+                moves_list.append((location[0]+i,location[1]+i))
+                if (location[0]+i,location[1]+i) in b_locations :
+                    break
+            else:
+                break
+        for i in range(1,8):
+            if (location[0]-i,location[1]+i) not in w_locations :
+                    moves_list.append((location[0]-i,location[1]+i))
+                    if (location[0]-i,location[1]+i) in b_locations :
+                        break
+            else:
+                break        
+        for i in range(1,8):
+            if (location[0]+i,location[1]-i) not in w_locations :
+                moves_list.append((location[0]+i,location[1]-i))
+                if (location[0]+i,location[1]-i) in b_locations :
+                    break
+            else:
+                break
+    else:
+        for i in range(1,8):
+            if (location[0]-i,location[1]-i) not in b_locations :
+                moves_list.append((location[0]-i,location[1]-i))
+                if (location[0]-i,location[1]-i) in w_locations :
+                    break
+            else:
+                break
+        for i in range(1,8):
+            if (location[0]+i,location[1]+i) not in b_locations :
+                moves_list.append((location[0]+i,location[1]+i))
+                if (location[0]+i,location[1]+i) in w_locations :
+                    break
+            else:
+                break
+        for i in range(1,8):
+            if (location[0]-i,location[1]+i) not in b_locations :
+                    moves_list.append((location[0]-i,location[1]+i))
+                    if (location[0]-i,location[1]+i) in w_locations :
+                        break
+            else:
+                break        
+        for i in range(1,8):
+            if (location[0]+i,location[1]-i) not in b_locations :
+                moves_list.append((location[0]+i,location[1]-i))
+                if (location[0]+i,location[1]-i) in w_locations :
+                    break
+            else:
+                break
+        
+    return moves_list
+
+def queen_moves(location , turn ):
+    All_Moves = []
+    All_Moves += bishop_moves(location , turn )
+    All_Moves += rook_moves(location , turn)
+    return All_Moves
+
 # Function that finds valid moves of each piece on boards
 def val_moves(pieces , locations , turn):
     moves = []
@@ -220,6 +289,10 @@ def val_moves(pieces , locations , turn):
             moves = pawn_moves(piece_location , turn)
         if piece == 'rook':
             moves = rook_moves(piece_location , turn )    
+        if piece == 'bishop':
+            moves = bishop_moves(piece_location , turn )   
+        if piece == 'queen':
+            moves = queen_moves(piece_location , turn)     
         all_pieces_moves.append(moves)
     return all_pieces_moves
 
