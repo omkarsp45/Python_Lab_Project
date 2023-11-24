@@ -83,7 +83,7 @@ black_king = pygame.transform.scale(black_king, (80, 80))
 # Drawing Chess Pieces 
 def draw_chess_pieces():
     for i in range(len(w_pieces)):
-        if w_pieces[i]=='pawn':
+        if w_pieces[i]== 'pawn':
             screen.blit(white_pawn , (w_locations[i][0]*100+20 , w_locations[i][1]*100+30))
         elif w_pieces[i]== 'rook':
             screen.blit(white_rook , (w_locations[i][0]*100+15 , w_locations[i][1]*100+20))
@@ -129,7 +129,7 @@ def pawn_moves(location , turn ):
     if turn == 'black':
         if (location[0],location[1]+1) not in w_locations and (location[0],location[1]+1) not in b_locations : 
             moves_list.append((location[0],location[1]+1))
-            if (location[0],location[1]+2) not in w_locations and (location[0],location[1]+2) not in b_locations : 
+            if (location[0],location[1]+2) not in w_locations and (location[0],location[1]+2) not in b_locations and location[1]==1: 
                 moves_list.append((location[0],location[1]+2))  
         if (location[0]+1,location[1]+1) in w_locations :
             moves_list.append((location[0]+1,location[1]+1)) 
@@ -138,12 +138,75 @@ def pawn_moves(location , turn ):
     else:
         if (location[0],location[1]-1) not in w_locations and (location[0],location[1]-1) not in b_locations : 
             moves_list.append((location[0],location[1]-1))
-            if (location[0],location[1]-2) not in w_locations and (location[0],location[1]-2) not in b_locations : 
+            if (location[0],location[1]-2) not in w_locations and (location[0],location[1]-2) not in b_locations and location[1]==6: 
                 moves_list.append((location[0],location[1]-2))  
         if (location[0]+1,location[1]-1) in b_locations :
             moves_list.append((location[0]+1,location[1]-1))    
         if (location[0]-1,location[1]-1) in b_locations :
             moves_list.append((location[0]-1,location[1]-1)) 
+    return moves_list
+
+def rook_moves(location , turn ):
+    moves_list = []
+    if turn == 'white':
+        for i in range(1,8):
+            if (location[0],location[1]-i) not in w_locations :
+                moves_list.append((location[0],location[1]-i))
+                if (location[0],location[1]-i) in b_locations :
+                    break
+            else:
+                break
+        for i in range(1,8):
+            if (location[0],location[1]+i) not in w_locations :
+                moves_list.append((location[0],location[1]+i))
+                if (location[0],location[1]+i) in b_locations :
+                    break
+            else:
+                break
+        for i in range(1,8):
+            if (location[0]-i,location[1]) not in w_locations :
+                    moves_list.append((location[0]-i,location[1]))
+                    if (location[0]-i,location[1]) in b_locations :
+                        break
+            else:
+                break        
+        for i in range(1,8):
+            if (location[0]+i,location[1]) not in w_locations :
+                moves_list.append((location[0]+i,location[1]))
+                if (location[0]+i,location[1]) in b_locations :
+                    break
+            else:
+                break
+    else:
+        for i in range(1,8):
+            if (location[0],location[1]-i) not in b_locations :
+                moves_list.append((location[0],location[1]-i))
+                if (location[0],location[1]-i) in w_locations :
+                    break
+            else:
+                break
+        for i in range(1,8):
+            if (location[0],location[1]+i) not in b_locations :
+                moves_list.append((location[0],location[1]+i))
+                if (location[0],location[1]+i) in w_locations :
+                    break
+            else:
+                break
+        for i in range(1,8):
+            if (location[0]-i,location[1]) not in b_locations :
+                    moves_list.append((location[0]-i,location[1]))
+                    if (location[0]-i,location[1]) in w_locations :
+                        break
+            else:
+                break        
+        for i in range(1,8):
+            if (location[0]+i,location[1]) not in b_locations :
+                moves_list.append((location[0]+i,location[1]))
+                if (location[0]+i,location[1]) in w_locations :
+                    break
+            else:
+                break
+        
     return moves_list
 
 # Function that finds valid moves of each piece on boards
@@ -155,6 +218,8 @@ def val_moves(pieces , locations , turn):
         piece = pieces[i]
         if piece == 'pawn':
             moves = pawn_moves(piece_location , turn)
+        if piece == 'rook':
+            moves = rook_moves(piece_location , turn )    
         all_pieces_moves.append(moves)
     return all_pieces_moves
 
@@ -180,7 +245,7 @@ def draw_color(moves):
 white_options = val_moves(w_pieces , w_locations , 'white')
 black_options = val_moves(b_pieces , b_locations , 'black')
 
-# Game Starts Frob_pieces --b>
+# Game Starts From Here ----> 
 while running:
     speed.tick(60)      # Game will be run at 60fps.
     
@@ -215,7 +280,7 @@ while running:
                     available_moves = []  
                 white_options = val_moves(w_pieces , w_locations , 'white')
                 black_options = val_moves(b_pieces , b_locations , 'black')    
-            if turn > 2 :
+            else:
                 if clicked_coordinate in b_locations:
                     selected = b_locations.index(clicked_coordinate)                   
                     turn = 4
