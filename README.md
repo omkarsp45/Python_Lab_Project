@@ -28,3 +28,7 @@
 ## 23/11/2023
 -> Fix Main Loop Logic
 -> Corrected Pawn Moves List Function
+
+## 24/11/2023
+-> Adding Rook Moves Logic
+ 
