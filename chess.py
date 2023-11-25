@@ -316,6 +316,44 @@ def knight_moves(location , turn ):
             moves_list.append((location[0]-1,location[1]+2))   
     return moves_list            
 
+def king_moves(location , turn ):
+    moves_list =[]
+    if turn == 'white':
+        if (location[0],location[1]+1) not in w_locations:
+            moves_list.append((location[0],location[1]+1))
+        if (location[0]+1,location[1]) not in w_locations:
+            moves_list.append((location[0]+1,location[1]))
+        if (location[0]-1,location[1]) not in w_locations:
+            moves_list.append((location[0]-1,location[1]))
+        if (location[0],location[1]-1) not in w_locations:
+            moves_list.append((location[0],location[1]-1))
+        if (location[0]+1,location[1]+1) not in w_locations:
+            moves_list.append((location[0]+1,location[1]+1))
+        if (location[0]+1,location[1]-1) not in w_locations:
+            moves_list.append((location[0]+1,location[1]-1))
+        if (location[0]-1,location[1]+1) not in w_locations:
+            moves_list.append((location[0]-1,location[1]+1))
+        if (location[0]-1,location[1]-1) not in w_locations:
+            moves_list.append((location[0]-1,location[1]-1))
+    else:
+        if (location[0],location[1]+1) not in b_locations:
+            moves_list.append((location[0],location[1]+1))
+        if (location[0]+1,location[1]) not in b_locations:
+            moves_list.append((location[0]+1,location[1]))
+        if (location[0]-1,location[1]) not in b_locations:
+            moves_list.append((location[0]-1,location[1]))
+        if (location[0],location[1]-1) not in b_locations:
+            moves_list.append((location[0],location[1]-1))
+        if (location[0]+1,location[1]+1) not in b_locations:
+            moves_list.append((location[0]+1,location[1]+1))
+        if (location[0]+1,location[1]-1) not in b_locations:
+            moves_list.append((location[0]+1,location[1]-1))
+        if (location[0]-1,location[1]+1) not in b_locations:
+            moves_list.append((location[0]-1,location[1]+1))
+        if (location[0]-1,location[1]-1) not in b_locations:
+            moves_list.append((location[0]-1,location[1]-1))
+    return moves_list 
+
 # Function that finds valid moves of each piece on boards
 def val_moves(pieces , locations , turn):
     moves = []
@@ -332,7 +370,9 @@ def val_moves(pieces , locations , turn):
         if piece == 'queen':
             moves = queen_moves(piece_location , turn)     
         if piece == 'knight':
-            moves = knight_moves(piece_location , turn)     
+            moves = knight_moves(piece_location , turn)   
+        if piece == 'king':
+            moves = king_moves(piece_location , turn)      
         all_pieces_moves.append(moves)
     return all_pieces_moves
 
@@ -367,7 +407,7 @@ while running:
     draw_chess_pieces() # Draw Chess Pieces
 
     if selected != -100 :
-        available_moves = all_valid_moves()
+        available_moves = all_valid_moves() 
         draw_color(available_moves)
     for Event in pygame.event.get():
         if Event.type == pygame.QUIT: # Functionality to close button
