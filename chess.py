@@ -8,13 +8,13 @@ pygame.init()
 
 # Variables
 board_size = 8
-width , height = 800 , 800
+width , height = 800 , 830
 block_size = 100
 running = True
 
 # Python Window Setup
 # Chess Board
-screen = pygame.display.set_mode([width,height])
+screen = pygame.display.set_mode([width,height],)
 # Game Name
 pygame.display.set_caption("Satranj Ka Khel")
 # Game Logo
@@ -33,14 +33,16 @@ turn = 1
 # index of selected location
 selected = -100
 
+font = pygame.font.Font(None, 36)
+
 # Drawing Chess Board
 def draw_chess_board():
     for i in range(board_size):
         for j in range(board_size):
             if (i+j)%2 == 0 : 
-                colour = (245,245,245)
+                colour = (235,235,235)
             else:
-                colour = (54,51,51)    
+                colour = (55,55,55)    
             pygame.draw.rect(screen , colour , (i*block_size , j*block_size , block_size , block_size))
 
 
@@ -376,6 +378,22 @@ def val_moves(pieces , locations , turn):
         all_pieces_moves.append(moves)
     return all_pieces_moves
 
+def check_bcheck():
+    for i in range(len(b_pieces)):
+        if b_pieces[i] == 'king':
+            if b_locations[i] in val_moves(w_pieces , w_locations , 'white'):
+                print("YES")
+                text = font.render("Black Has Check" , (255,255,255))
+                screen.blit(text, (350, 800))
+
+def check_wcheck():
+    for i in range(len(w_pieces)):
+        if w_pieces[i] == 'king':
+            if w_locations[i] in val_moves(b_pieces , b_locations , 'black'):
+                print("YES")
+                text = font.render("White Has Check" , (255,255,255))  
+                screen.blit(text, (350, 800))
+
 # valid(available) moves
 def all_valid_moves():
     if turn <= 2 :
@@ -389,9 +407,9 @@ available_moves = []
 
 def draw_color(moves):
     if turn <= 2:
-        color = 'red'
+        color = (255,21,0)
     else:
-        color = 'blue'
+        color = (76,0,255)
     for i in range(len(moves)):
         pygame.draw.circle(screen, color, (moves[i][0] * 100 + 50, moves[i][1] * 100 + 50), 5)
 
@@ -400,11 +418,15 @@ black_options = val_moves(b_pieces , b_locations , 'black')
 
 # Game Starts From Here ----> 
 while running:
-    speed.tick(60)      # Game will be run at 60fps.
+    speed.tick(60) # Game will be run at 60fps.
     
     draw_chess_board() # Draw Chess Board
 
     draw_chess_pieces() # Draw Chess Pieces
+
+    check_wcheck() 
+
+    check_bcheck() 
 
     if selected != -100 :
         available_moves = all_valid_moves() 
@@ -432,7 +454,7 @@ while running:
                     selected = -100
                     available_moves = []  
                 white_options = val_moves(w_pieces , w_locations , 'white')
-                black_options = val_moves(b_pieces , b_locations , 'black')    
+                black_options = val_moves(b_pieces , b_locations , 'black')  
             else:
                 if clicked_coordinate in b_locations:
                     selected = b_locations.index(clicked_coordinate)                   
@@ -448,7 +470,6 @@ while running:
                     available_moves = []
                 white_options = val_moves(w_pieces , w_locations , 'white')
                 black_options = val_moves(b_pieces , b_locations , 'black')      
-
     pygame.display.flip()
 
 pygame.quit()
