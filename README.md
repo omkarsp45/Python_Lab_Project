@@ -36,3 +36,6 @@
 
 ## 25/11/2023 
 -> Adding Kings Moves Logic
+
+## 30/11/2023
+-> Adding Check/CheckMate Logic
