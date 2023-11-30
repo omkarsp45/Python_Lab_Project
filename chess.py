@@ -33,6 +33,8 @@ turn = 1
 # index of selected location
 selected = -100
 
+game_on = True
+
 font = pygame.font.Font(None, 36)
 
 # Drawing Chess Board
@@ -396,24 +398,69 @@ def val_moves(pieces , locations , turn):
                 # text = font.render("White Has Check" , (255,255,255))  
                 # screen.blit(text, True, (350, 800))
 
-def check_check():
-    if 'king' in w_pieces:
-        index = w_pieces.index('king')
-        location = w_locations[index]
-        for i in range(len(black_options)):
-            if location in black_options[i]:
-                print("YES")
-                text = font.render("White Has Check" , (255,255,255))  
-                screen.blit(text, True, (350, 800))
-    elif 'king' in b_pieces:
-        index = b_pieces.index('king')
-        location = b_locations[index]
-        for i in range(len(white_options)):
-            if location in white_options[i]:
-                print("YES")
-                text = font.render("Black Has Check" , (255,255,255))  
-                screen.blit(text, True, (350, 800))
+# def check_check():
+#     white_king_index = w_pieces.index('king') if 'king' in w_pieces else -1
+#     black_king_index = b_pieces.index('king') if 'king' in b_pieces else -1
+
+#     if white_king_index != -1:
+#         white_king_location = w_locations[white_king_index]
+#         for i in range(len(black_options)):
+#             if white_king_location in val_moves(b_pieces, b_locations, 'black'):
+#                 print("White is in check")
+#                 text = font.render("White Has Check", (255, 255, 255))
+#                 screen.blit(text, True, (350, 800))
+#                 return
+
+#     if black_king_index != -1:
+#         black_king_location = b_locations[black_king_index]
+#         for i in range(len(white_options)):
+#             if black_king_location in val_moves(w_pieces, w_locations, 'white'):
+#                 print("Black is in check")
+#                 text = font.render("Black Has Check", (255, 255, 255))
+#                 screen.blit(text, True, (350, 800))
+#                 return
+
                 
+def check_check():
+    white_king_index = w_pieces.index('king') if 'king' in w_pieces else -1
+    black_king_index = b_pieces.index('king') if 'king' in b_pieces else -1
+
+    if white_king_index != -1:
+        white_king_location = w_locations[white_king_index]
+        for i in range(len(black_options)):
+            if white_king_location in black_options[i]:
+                # print("White is in check")
+                text = font.render("White is in Check", True, (255, 255, 255))
+                screen.blit(text, (300, 800))
+                return 1
+
+    if black_king_index != -1:
+        black_king_location = b_locations[black_king_index]
+        for i in range(len(white_options)):
+            if black_king_location in white_options[i]:
+                # print("Black is in check")
+                text = font.render("Black is in Check", True, (255, 255, 255))
+                screen.blit(text, (300, 800))
+                return 2
+
+    # print("No check detected")
+    return 0
+
+def check_win():
+    global game_on
+    if turn <= 2:
+        if check_check() == 2:
+            text = font.render("Black Wins", True, (255, 255, 255))
+            screen.blit(text, (370, 410))
+            game_on = False
+            return False
+    else:
+        if check_check() == 1:
+            text = font.render("White Wins", True, (255, 255, 255))
+            screen.blit(text, (370, 410))
+            game_on = False
+            return False
+    return True    
 
 # valid(available) moves
 def all_valid_moves():
@@ -445,7 +492,7 @@ while running:
 
     draw_chess_pieces() # Draw Chess Pieces
 
-    check_check() 
+    # check_check() 
 
     if selected != -100 :
         available_moves = all_valid_moves() 
@@ -455,11 +502,13 @@ while running:
             pygame.quit()    # Just deinitializes library(can get error in further pygame instructions).
             sys.exit()
 
-        elif Event.type == pygame.MOUSEBUTTONDOWN and Event.button == 1:
+        elif Event.type == pygame.MOUSEBUTTONDOWN and Event.button == 1 and game_on == True:
             x = Event.pos[0]
             y = Event.pos[1]
             clicked_coordinate = (x//100 , y//100)  # floor div to find exact block coordinate
             if turn <= 2:
+                if (not check_win()) :
+                    break
                 if clicked_coordinate in w_locations:
                     selected = w_locations.index(clicked_coordinate)
                     turn = 2
@@ -474,7 +523,10 @@ while running:
                     available_moves = []     
                 white_options = val_moves(w_pieces , w_locations , 'white')
                 black_options = val_moves(b_pieces , b_locations , 'black')  
-            else:
+                check_check() 
+            elif game_on == True:
+                if (not check_win()) :
+                    break
                 if clicked_coordinate in b_locations:
                     selected = b_locations.index(clicked_coordinate)                   
                     turn = 4
@@ -489,6 +541,7 @@ while running:
                     available_moves = []
                 white_options = val_moves(w_pieces , w_locations , 'white')
                 black_options = val_moves(b_pieces , b_locations , 'black')      
+                check_check() 
     pygame.display.flip()
 
 pygame.quit()
