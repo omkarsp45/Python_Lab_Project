@@ -378,21 +378,42 @@ def val_moves(pieces , locations , turn):
         all_pieces_moves.append(moves)
     return all_pieces_moves
 
-def check_bcheck():
-    for i in range(len(b_pieces)):
-        if b_pieces[i] == 'king':
-            if b_locations[i] in val_moves(w_pieces , w_locations , 'white'):
-                print("YES")
-                text = font.render("Black Has Check" , (255,255,255))
-                screen.blit(text, (350, 800))
+# def check_bcheck():
+#     for i in range(len(b_pieces)):
+#         if b_pieces[i] == 'king':
+#             if b_locations[i] in val_moves(w_pieces , w_locations , 'white'):
+#                 print("YES")
+#                 text = font.render("Black Has Check" , (255,255,255))
+#                 screen.blit(text, True,  (350, 800))
+#             else:
+#                 print("NO")    
 
-def check_wcheck():
-    for i in range(len(w_pieces)):
-        if w_pieces[i] == 'king':
-            if w_locations[i] in val_moves(b_pieces , b_locations , 'black'):
+# def check_wcheck():
+#     for i in range(len(w_pieces)):
+#         if w_pieces[i] == 'king':
+#             if w_locations[i] in val_moves(b_pieces , b_locations , 'black'):
+                # print("YES")
+                # text = font.render("White Has Check" , (255,255,255))  
+                # screen.blit(text, True, (350, 800))
+
+def check_check():
+    if 'king' in w_pieces:
+        index = w_pieces.index('king')
+        location = w_locations[index]
+        for i in range(len(black_options)):
+            if location in black_options[i]:
                 print("YES")
                 text = font.render("White Has Check" , (255,255,255))  
-                screen.blit(text, (350, 800))
+                screen.blit(text, True, (350, 800))
+    elif 'king' in b_pieces:
+        index = b_pieces.index('king')
+        location = b_locations[index]
+        for i in range(len(white_options)):
+            if location in white_options[i]:
+                print("YES")
+                text = font.render("Black Has Check" , (255,255,255))  
+                screen.blit(text, True, (350, 800))
+                
 
 # valid(available) moves
 def all_valid_moves():
@@ -424,9 +445,7 @@ while running:
 
     draw_chess_pieces() # Draw Chess Pieces
 
-    check_wcheck() 
-
-    check_bcheck() 
+    check_check() 
 
     if selected != -100 :
         available_moves = all_valid_moves() 
@@ -452,7 +471,7 @@ while running:
                         b_locations.pop(piece_index)
                     turn = 3
                     selected = -100
-                    available_moves = []  
+                    available_moves = []     
                 white_options = val_moves(w_pieces , w_locations , 'white')
                 black_options = val_moves(b_pieces , b_locations , 'black')  
             else:
