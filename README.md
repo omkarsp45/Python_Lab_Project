@@ -39,3 +39,7 @@
 
 ## 30/11/2023
 -> Adding Check/CheckMate Logic
+
+## 05/12/2023
+-> Updated Code
+
