@@ -33,8 +33,6 @@ turn = 1
 # Index of selected location
 selected = -100
 
-game_on = True
-
 # Font 
 font = pygame.font.Font(None, 36)
 
@@ -278,78 +276,28 @@ def queen_moves(location , turn ):
 
 def knight_moves(location , turn ):
     moves_list = []
+    dummy = [(2,1),(2,-1),(-2,-1),(-2,1),(1,2),(1,-2),(-1,-2),(-1,2)]
     if turn == 'black':
-        if (location[0]+2,location[1]+1) not in b_locations:
-            moves_list.append((location[0]+2,location[1]+1))
-        if (location[0]+2,location[1]-1) not in b_locations:
-            moves_list.append((location[0]+2,location[1]-1))
-        if (location[0]-2,location[1]-1) not in b_locations:    
-            moves_list.append((location[0]-2,location[1]-1))
-        if (location[0]-2,location[1]+1) not in b_locations:    
-            moves_list.append((location[0]-2,location[1]+1))
-        if (location[0]+1,location[1]+2) not in b_locations:    
-            moves_list.append((location[0]+1,location[1]+2))
-        if (location[0]+1,location[1]-2) not in b_locations:    
-            moves_list.append((location[0]+1,location[1]-2))
-        if (location[0]-1,location[1]-2) not in b_locations:    
-            moves_list.append((location[0]-1,location[1]-2))
-        if (location[0]-1,location[1]+2) not in b_locations:    
-            moves_list.append((location[0]-1,location[1]+2))
+        for i in range(8):
+            if (location[0]+dummy[i][0],location[1]+dummy[i][1]) not in b_locations:    
+                moves_list.append((location[0]+dummy[i][0],location[1]+dummy[i][1]))
     else:
-        if (location[0]+2,location[1]+1) not in w_locations:
-            moves_list.append((location[0]+2,location[1]+1))
-        if (location[0]+2,location[1]-1) not in w_locations:
-            moves_list.append((location[0]+2,location[1]-1))
-        if (location[0]-2,location[1]-1) not in w_locations:    
-            moves_list.append((location[0]-2,location[1]-1))
-        if (location[0]-2,location[1]+1) not in w_locations:    
-            moves_list.append((location[0]-2,location[1]+1))
-        if (location[0]+1,location[1]+2) not in w_locations:    
-            moves_list.append((location[0]+1,location[1]+2))
-        if (location[0]+1,location[1]-2) not in w_locations:    
-            moves_list.append((location[0]+1,location[1]-2))
-        if (location[0]-1,location[1]-2) not in w_locations:    
-            moves_list.append((location[0]-1,location[1]-2))
-        if (location[0]-1,location[1]+2) not in w_locations:    
-            moves_list.append((location[0]-1,location[1]+2))   
+        for i in range(8):
+            if (location[0]+dummy[i][0],location[1]+dummy[i][1]) not in w_locations:    
+                moves_list.append((location[0]+dummy[i][0],location[1]+dummy[i][1]))
     return moves_list
 
 def king_moves(location , turn ):
     moves_list =[]
+    dummy = [(0,1),(0,-1),(-1,-1),(-1,1),(1,0),(1,1),(-1,0),(1,-1)]
     if turn == 'white':
-        if (location[0],location[1]+1) not in w_locations:
-            moves_list.append((location[0],location[1]+1))
-        if (location[0]+1,location[1]) not in w_locations:
-            moves_list.append((location[0]+1,location[1]))
-        if (location[0]-1,location[1]) not in w_locations:
-            moves_list.append((location[0]-1,location[1]))
-        if (location[0],location[1]-1) not in w_locations:
-            moves_list.append((location[0],location[1]-1))
-        if (location[0]+1,location[1]+1) not in w_locations:
-            moves_list.append((location[0]+1,location[1]+1))
-        if (location[0]+1,location[1]-1) not in w_locations:
-            moves_list.append((location[0]+1,location[1]-1))
-        if (location[0]-1,location[1]+1) not in w_locations:
-            moves_list.append((location[0]-1,location[1]+1))
-        if (location[0]-1,location[1]-1) not in w_locations:
-            moves_list.append((location[0]-1,location[1]-1))
+        for i in range(8):
+            if (location[0]+dummy[i][0],location[1]+dummy[i][1]) not in w_locations:    
+                moves_list.append((location[0]+dummy[i][0],location[1]+dummy[i][1]))
     else:
-        if (location[0],location[1]+1) not in b_locations:
-            moves_list.append((location[0],location[1]+1))
-        if (location[0]+1,location[1]) not in b_locations:
-            moves_list.append((location[0]+1,location[1]))
-        if (location[0]-1,location[1]) not in b_locations:
-            moves_list.append((location[0]-1,location[1]))
-        if (location[0],location[1]-1) not in b_locations:
-            moves_list.append((location[0],location[1]-1))
-        if (location[0]+1,location[1]+1) not in b_locations:
-            moves_list.append((location[0]+1,location[1]+1))
-        if (location[0]+1,location[1]-1) not in b_locations:
-            moves_list.append((location[0]+1,location[1]-1))
-        if (location[0]-1,location[1]+1) not in b_locations:
-            moves_list.append((location[0]-1,location[1]+1))
-        if (location[0]-1,location[1]-1) not in b_locations:
-            moves_list.append((location[0]-1,location[1]-1))
+        for i in range(8):
+            if (location[0]+dummy[i][0],location[1]+dummy[i][1]) not in b_locations:    
+                moves_list.append((location[0]+dummy[i][0],location[1]+dummy[i][1]))
     return moves_list 
 
 # Function that finds valid moves of each piece on boards
@@ -373,8 +321,8 @@ def val_moves(pieces , locations , turn):
             moves = king_moves(piece_location , turn)      
         all_pieces_moves.append(moves)
     return all_pieces_moves
-                
-def check_check():
+
+def check():
     white_king_index = w_pieces.index('king') if 'king' in w_pieces else -1
     black_king_index = b_pieces.index('king') if 'king' in b_pieces else -1
 
@@ -382,40 +330,23 @@ def check_check():
         white_king_location = w_locations[white_king_index]
         for i in range(len(black_options)):
             if white_king_location in black_options[i]:
-                # print("White is in check")
                 text = font.render("White is in Check", True, (255, 255, 255))
                 screen.blit(text, (300, 800))
-                return 1
+                return
+            else:
+                text = font.render("White is in Check", True, (0, 0, 0))
+                screen.blit(text, (300, 800))
 
     if black_king_index != -1:
         black_king_location = b_locations[black_king_index]
         for i in range(len(white_options)):
             if black_king_location in white_options[i]:
-                # print("Black is in check")
                 text = font.render("Black is in Check", True, (255, 255, 255))
                 screen.blit(text, (300, 800))
-                return 2
-
-    # print("No check detected")
-    return 0
-
-who_wons = ""
-
-def check_win():
-    global game_on
-    global who_wons
-    if turn <= 2:
-        if check_check() == 2:
-            # text = font.render("Black Wins", True, (255, 255, 255))
-            # screen.blit(text, (370, 410))
-            who_wons = "black"
-            game_on = False
-    else:
-        if check_check() == 1:
-            # text = font.render("White Wins", True, (255, 255, 255))
-            # screen.blit(text, (370, 410))
-            who_wons = "white"
-            game_on = False
+                return
+            else:
+                text = font.render("Black is in Check", True, (0, 0, 0))
+                screen.blit(text, (300, 800))    
 
 # valid(available) moves
 def all_valid_moves():
@@ -456,22 +387,11 @@ while running:
         if Event.type == pygame.QUIT: # Functionality to close button
             pygame.quit()    # Just deinitializes library(can get error in further pygame instructions).
             sys.exit()
-
-        elif Event.type == pygame.MOUSEBUTTONDOWN and Event.button == 1 and game_on == True:
+        elif Event.type == pygame.MOUSEBUTTONDOWN and Event.button == 1:
             x = Event.pos[0]
             y = Event.pos[1]
             clicked_coordinate = (x//100 , y//100)  # floor div to find exact block coordinate
             if turn <= 2:
-                check_win()
-                if game_on == False :
-                    if who_wons == "white":
-                        text = font.render("White Wins", True, (255, 255, 255))
-                        screen.blit(text, (370, 410))
-                    else:
-                        text = font.render("Black Wins", True, (255, 255, 255))
-                        screen.blit(text, (370, 410))
-                    pygame.display.flip()    
-                    break
                 if clicked_coordinate in w_locations:
                     selected = w_locations.index(clicked_coordinate)
                     turn = 2
@@ -485,19 +405,9 @@ while running:
                     selected = -100
                     available_moves = []
                 white_options = val_moves(w_pieces , w_locations , 'white')
-                black_options = val_moves(b_pieces , b_locations , 'black')  
-                check_check() 
+                black_options = val_moves(b_pieces , b_locations , 'black')   
+                check()
             else :
-                check_win()
-                if game_on == False :
-                    if who_wons == "white":
-                        text = font.render("White Wins", True, (255, 255, 255))
-                        screen.blit(text, (370, 410))
-                    else:
-                        text = font.render("Black Wins", True, (255, 255, 255))
-                        screen.blit(text, (370, 410))
-                    pygame.display.flip()    
-                    break
                 if clicked_coordinate in b_locations:
                     selected = b_locations.index(clicked_coordinate)                   
                     turn = 4
@@ -511,8 +421,8 @@ while running:
                     selected = -100
                     available_moves = []
                 white_options = val_moves(w_pieces , w_locations , 'white')
-                black_options = val_moves(b_pieces , b_locations , 'black')      
-                check_check() 
+                black_options = val_moves(b_pieces , b_locations , 'black')
+                check()    
     pygame.display.flip()
 
 pygame.quit()
