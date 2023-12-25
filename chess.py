@@ -310,7 +310,7 @@ def val_moves(pieces , locations , turn):
         if piece == 'pawn':
             moves = pawn_moves(piece_location , turn)
         if piece == 'rook':
-            moves = rook_moves(piece_location , turn )    
+            moves = rook_moves(piece_location , turn )
         if piece == 'bishop':
             moves = bishop_moves(piece_location , turn )   
         if piece == 'queen':
@@ -331,22 +331,97 @@ def check():
         for i in range(len(black_options)):
             if white_king_location in black_options[i]:
                 text = font.render("White is in Check", True, (255, 255, 255))
-                screen.blit(text, (300, 800))
+                screen.blit(text, (10, 800))       
+                check_mate("white", white_king_location)
                 return
             else:
                 text = font.render("White is in Check", True, (0, 0, 0))
-                screen.blit(text, (300, 800))
+                screen.blit(text, (10, 800))
 
     if black_king_index != -1:
         black_king_location = b_locations[black_king_index]
         for i in range(len(white_options)):
             if black_king_location in white_options[i]:
                 text = font.render("Black is in Check", True, (255, 255, 255))
-                screen.blit(text, (300, 800))
-                return
+                screen.blit(text, (10, 800))
+                check_mate("black", black_king_location)
+                return 
             else:
                 text = font.render("Black is in Check", True, (0, 0, 0))
-                screen.blit(text, (300, 800))    
+                screen.blit(text, (10, 800))    
+
+    return "No"
+
+
+def check_mate(color , location):
+    if color == "White":
+        mate = True
+        for x in king_moves(location,"white"):
+            if x not in black_options:
+                return
+        Modified_List = []
+        for i in range(len(w_pieces)):
+            piece_location = w_locations[i]
+            piece = w_pieces[i]
+            if piece == 'pawn':
+                moves = pawn_moves(piece_location , "white")
+            if piece == 'rook':
+                moves = rook_moves(piece_location , "white" )
+            if piece == 'bishop':
+                moves = bishop_moves(piece_location , "white" )   
+            if piece == 'queen':
+                moves = queen_moves(piece_location , "white")     
+            if piece == 'knight':
+                moves = knight_moves(piece_location , "white")   
+            if piece == 'king':
+                moves = king_moves(piece_location , "white")    
+            for j in range(len(moves)):
+                    w_locations[i]=moves[j]
+                    if check() == "No":
+                        Modified_List.append(moves[j])
+        global available_moves
+        available_moves = Modified_List
+        if len(Modified_List) == 0 :
+            text = font.render("White CheckMate", True, (255, 255, 255))
+            screen.blit(text, (500, 800))       
+            pygame.quit()
+            return
+        else:
+            text = font.render("White CheckMate", True, (0, 0, 0))
+            screen.blit(text, (500, 800))
+    if color == "Black":
+        mate = True
+        for x in king_moves(location,"black"):
+            if x not in white_options:
+                return
+        Modified_List = []
+        for i in range(len(b_pieces)):
+            piece_location = b_locations[i]
+            piece = b_pieces[i]
+            if piece == 'pawn':
+                moves = pawn_moves(piece_location , "black")
+            if piece == 'rook':
+                moves = rook_moves(piece_location , "black" )
+            if piece == 'bishop':
+                moves = bishop_moves(piece_location , "black" )   
+            if piece == 'queen':
+                moves = queen_moves(piece_location , "black")     
+            if piece == 'knight':
+                moves = knight_moves(piece_location , "black")   
+            if piece == 'king':
+                moves = king_moves(piece_location , "black")    
+            for j in range(len(moves)):
+                    b_locations[i]=moves[j]
+                    if check() == "No":
+                        Modified_List.append(moves[j])
+        if len(Modified_List) == 0 :
+            text = font.render("Black CheckMate", True, (255, 255, 255))
+            screen.blit(text, (500, 800))       
+            pygame.quit()
+            return
+        else:
+            text = font.render("Black CheckMate", True, (0, 0, 0))
+            screen.blit(text, (500, 800))
 
 # valid(available) moves
 def all_valid_moves():
@@ -378,8 +453,6 @@ while running:
 
     draw_chess_pieces() # Draw Chess Pieces
 
-    # check_check() 
-
     if selected != -100 :
         available_moves = all_valid_moves() 
         draw_color(available_moves)
@@ -409,7 +482,7 @@ while running:
                 check()
             else :
                 if clicked_coordinate in b_locations:
-                    selected = b_locations.index(clicked_coordinate)                   
+                    selected = b_locations.index(clicked_coordinate)
                     turn = 4
                 if clicked_coordinate in available_moves and selected != -100:
                     b_locations[selected] = clicked_coordinate
@@ -422,7 +495,7 @@ while running:
                     available_moves = []
                 white_options = val_moves(w_pieces , w_locations , 'white')
                 black_options = val_moves(b_pieces , b_locations , 'black')
-                check()    
+                check()
     pygame.display.flip()
 
 pygame.quit()
