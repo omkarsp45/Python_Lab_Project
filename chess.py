@@ -1,8 +1,6 @@
 # Building Two Player Chess Game using Pygame
-
 import pygame
 pygame.init()
-
 
 board_size = 8
 width , height = 800 , 830
@@ -324,22 +322,22 @@ def check():
         for i in range(len(black_options)):
             if white_king_location in black_options[i]:
                 text = font.render("White is in Check", True, (255, 255, 255))
-                screen.blit(text, (350, 800))       
+                screen.blit(text, (300, 800))       
                 return ""
             else:
                 text = font.render("White is in Check", True, (0, 0, 0))
-                screen.blit(text, (350, 800))
+                screen.blit(text, (300, 800))
 
     if black_king_index != -1:
         black_king_location = b_locations[black_king_index]
         for i in range(len(white_options)):
             if black_king_location in white_options[i]:
                 text = font.render("Black is in Check", True, (255, 255, 255))
-                screen.blit(text, (350, 800))
+                screen.blit(text, (300, 800))
                 return ""
             else:
                 text = font.render("Black is in Check", True, (0, 0, 0))
-                screen.blit(text, (350, 800))    
+                screen.blit(text, (300, 800))    
     return "No"
 
 def check_mate(color , location):
@@ -368,11 +366,11 @@ def check_mate(color , location):
         available_moves = Modified_List
         if len(Modified_List) == 0 :
             text = font.render("White CheckMate", True, (255, 255, 255))
-            screen.blit(text, (350, 800))       
+            screen.blit(text, (300, 800))       
             return
         else:
             text = font.render("White CheckMate", True, (0, 0, 0))
-            screen.blit(text, (350, 800))
+            screen.blit(text, (300, 800))
     if color == "black":
         Modified_List = []
         for i in range(len(b_pieces)):
@@ -396,11 +394,11 @@ def check_mate(color , location):
                         Modified_List.append(moves[j])
         if len(Modified_List) == 0 :
             text = font.render("Black CheckMate", True, (255, 255, 255))
-            screen.blit(text, (350, 800))       
+            screen.blit(text, (300, 800))   
             return
         else:
             text = font.render("Black CheckMate", True, (0, 0, 0))
-            screen.blit(text, (350, 800))
+            screen.blit(text, (300, 800))
 
 def all_valid_moves():
     if turn <= 2 :
