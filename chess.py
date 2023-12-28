@@ -362,14 +362,13 @@ def check_mate(color , location):
                 moves = king_moves(piece_location , "white")    
             for j in range(len(moves)):
                     w_locations[i]=moves[j]
-                    if just_check() == "No":
+                    if check() == "No":
                         Modified_List.append(moves[j])
         global available_moves
         available_moves = Modified_List
         if len(Modified_List) == 0 :
             text = font.render("White CheckMate", True, (255, 255, 255))
             screen.blit(text, (500, 800))       
-            pygame.quit()
             return
         else:
             text = font.render("White CheckMate", True, (0, 0, 0))
@@ -393,12 +392,11 @@ def check_mate(color , location):
                 moves = king_moves(piece_location , "black")    
             for j in range(len(moves)):
                     b_locations[i]=moves[j]
-                    if just_check() == "No":
+                    if check() == "No":
                         Modified_List.append(moves[j])
         if len(Modified_List) == 0 :
             text = font.render("Black CheckMate", True, (255, 255, 255))
             screen.blit(text, (500, 800))       
-            pygame.quit()
             return
         else:
             text = font.render("Black CheckMate", True, (0, 0, 0))
